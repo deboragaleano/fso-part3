@@ -1,0 +1,27 @@
+{
+  "name": "fso-part3",
+  "version": "1.0.0",
+  "description": "Part 3 - Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deboragaleano/fso-part3.git"
+  },
+  "author": "Debora Galeano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deboragaleano/fso-part3/issues"
+  },
+  "homepage": "https://github.com/deboragaleano/fso-part3#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
