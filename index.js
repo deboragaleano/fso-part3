@@ -25,6 +25,7 @@ const persons = [
       }
 ]
 
+app.use(express.json()); 
 
 app.get('/api/persons', (req, res) => {
     res.json(persons); 
@@ -41,6 +42,19 @@ app.get('/info', (req, res) => {
 
     res.send(info)
 })
+
+//Display info for a single entry
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = persons.find(p => id === p.id);
+
+    if(person) {
+        res.json(person)
+    } else {
+        res.status(404).end()
+    }
+})
+
 
 const PORT = 3001
 app.listen(PORT, () => {
