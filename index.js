@@ -5,7 +5,16 @@ const app = express();
 
 // Adding the morgan middleware for logging (give info about requests, etc.) 
 // Configure it to log messages to your console based on the tiny configuration
-app.use(morgan('tiny')); 
+
+//create a new token for showing body
+//use stringify for converting [object, object] into a string
+morgan.token('body', (req) => {
+    return JSON.stringify(req.body)
+})
+
+//**TODO**: Check if this is the right way of solving this exercise
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
 
 let persons = [
     { 
@@ -108,6 +117,7 @@ app.post('/api/persons', (req, res) => {
     persons = [...persons, newPerson];
 
     res.json(persons); 
+    // console.log(req.body)
 
 })
 
