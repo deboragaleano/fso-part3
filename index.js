@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-
 let persons = [
     { 
         "name": "Arto Hellas", 
@@ -27,11 +26,12 @@ let persons = [
 
 app.use(express.json()); 
 
+//showing people 
 app.get('/api/persons', (req, res) => {
     res.json(persons); 
 })
 
-
+//**TODO**: Check if this is the right way of handling this error
 app.get('/info', (req, res) => {
     const date = new Date(); 
     const info = 
@@ -50,6 +50,7 @@ app.get('/api/persons/:id', (req, res) => {
 
     if(person) {
         res.json(person)
+        // handle error if not found 
     } else {
         res.status(404).end()
     }
@@ -69,13 +70,12 @@ app.delete('/api/persons/:id', (req,res) => {
 //Adding entries
 app.post('/api/persons', (req, res) => {
 
-    
+    //**TODO**: Check if this is the right way of handling both errors
     if(!req.body.name || !req.body.number) {
         return res.status(400).json({
             error: 'name/number is missing'
         })
     }
-    //
     const isSameName = persons.find(p => p.name === req.body.name); 
     
     if(isSameName){
@@ -84,6 +84,7 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
+    //**TODO**: Check if this is the right way generating random IDs 
     const generateId = () => {
         // this will get the max of an array with spread operator, and the map is to get
         // the id of each entry. The + 1 is to make sure it never uses the same id
