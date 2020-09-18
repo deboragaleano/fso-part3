@@ -12,7 +12,8 @@ morgan.token('body', (req) => {
     return JSON.stringify(req.body)
 })
 
-//**TODO**: Check if this is the right way of solving this exercise
+//**TODO**: Check if this is the right way of solving this exercise and 
+// if the middlewares should be up here before the routes
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
