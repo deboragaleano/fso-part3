@@ -5,7 +5,7 @@ const app = express();
 
 // Adding the morgan middleware for logging (give info about requests, etc.) 
 // Configure it to log messages to your console based on the tiny configuration
-app.use(morgan('tiny', 'immediate')); 
+app.use(morgan('tiny')); 
 
 let persons = [
     { 
