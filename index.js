@@ -69,6 +69,15 @@ app.delete('/api/persons/:id', (req,res) => {
 //Adding entries
 app.post('/api/persons', (req, res) => {
 
+    // const isSame = 
+// 
+
+    if(!req.body.name || !req.body.number) {
+        return res.status(400).json({
+            error: 'name/number is missing'
+        })
+    }
+
     const generateId = () => {
         // this will get the max of an array with spread operator, and the map is to get
         // the id of each entry. The + 1 is to make sure it never uses the same id
