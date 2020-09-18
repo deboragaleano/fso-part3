@@ -66,6 +66,28 @@ app.delete('/api/persons/:id', (req,res) => {
 
 })
 
+//Adding entries
+app.post('/api/persons', (req, res) => {
+
+    const generateId = () => {
+        // this will get the max of an array with spread operator, and the map is to get
+        // the id of each entry. The + 1 is to make sure it never uses the same id
+        const maxId = Math.max(...persons.map(p => p.id)) + 1
+        // generate number between 100 (max) and length of array (min) 
+        return Math.floor(Math.random() * (100 - maxId) + maxId)
+    }
+
+    const newPerson = {
+        name: req.body.name, 
+        number: req.body.number, 
+        id: generateId()
+    }
+
+    persons = [...persons, newPerson];
+
+    res.json(persons); 
+
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
