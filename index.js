@@ -69,12 +69,18 @@ app.delete('/api/persons/:id', (req,res) => {
 //Adding entries
 app.post('/api/persons', (req, res) => {
 
-    // const isSame = 
-// 
-
+    
     if(!req.body.name || !req.body.number) {
         return res.status(400).json({
             error: 'name/number is missing'
+        })
+    }
+    //
+    const isSameName = persons.find(p => p.name === req.body.name); 
+    
+    if(isSameName){
+        return res.status(400).json({
+            error: 'name must be unique'
         })
     }
 
