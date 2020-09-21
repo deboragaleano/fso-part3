@@ -1,7 +1,13 @@
 const express = require('express');
 const morgan = require('morgan'); 
+const cors = require('cors')
+
 
 const app = express();
+
+//adding cors to allow requests from all origins 
+app.use(cors())
+
 
 // Adding the morgan middleware for logging (give info about requests, etc.) 
 // Configure it to log messages to your console based on the tiny configuration
@@ -115,7 +121,7 @@ app.post('/api/persons', (req, res) => {
         id: generateId()
     }
 
-    persons = [...persons, newPerson];
+    persons = persons.concat(newPerson);
 
     res.json(persons); 
     // console.log(req.body)
