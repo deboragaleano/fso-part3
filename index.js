@@ -4,6 +4,8 @@ const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
 const app = express();
 
+app.use(express.static('build'))
+
 //adding cors to allow requests from all origins 
 app.use(cors())
 
