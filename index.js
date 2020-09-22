@@ -21,8 +21,8 @@ app.use(cors())
 // if the middlewares should be up here before the routes
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-app.use(express.json()); 
 
+app.use(express.json()); 
 let persons = [
     { 
         "name": "Arto Hellas", 
@@ -127,7 +127,7 @@ app.post('/api/persons', (req, res) => {
 
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server is running in ${PORT}`);
 })
