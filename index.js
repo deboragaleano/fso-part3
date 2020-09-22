@@ -1,8 +1,7 @@
 const express = require('express');
 // const morgan = require('morgan'); 
 const cors = require('cors')
-
-
+const { v4: uuidv4 } = require('uuid');
 const app = express();
 
 //adding cors to allow requests from all origins 
@@ -22,6 +21,7 @@ app.use(cors())
 // if the middlewares should be up here before the routes
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+app.use(express.json()); 
 
 let persons = [
     { 
@@ -46,7 +46,6 @@ let persons = [
       }
 ]
 
-app.use(express.json()); 
 
 //showing people 
 app.get('/api/persons', (req, res) => {
@@ -106,19 +105,19 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
-    //**TODO**: Check if this is the right way generating random IDs 
-    const generateId = () => {
-        // this will get the max of an array with spread operator, and the map is to get
-        // the id of each entry. The + 1 is to make sure it never uses the same id
-        const maxId = Math.max(...persons.map(p => p.id)) + 1
-        // generate number between 100 (max) and length of array (min) 
-        return Math.floor(Math.random() * (100 - maxId) + maxId)
-    }
+    // //**TODO**: Check if this is the right way generating random IDs 
+    // const generateId = () => {
+    //     // this will get the max of an array with spread operator, and the map is to get
+    //     // the id of each entry. The + 1 is to make sure it never uses the same id
+    //     const maxId = Math.max(...persons.map(p => p.id)) + 1
+    //     // generate number between 100 (max) and length of array (min) 
+    //     return Math.floor(Math.random() * (100 - maxId) + maxId)
+    // }
 
     const newPerson = {
         name: req.body.name, 
         number: req.body.number, 
-        id: generateId()
+        id: uuidv4()
     }
 
     persons = persons.concat(newPerson);
