@@ -1,5 +1,5 @@
 const express = require('express');
-const morgan = require('morgan'); 
+// const morgan = require('morgan'); 
 const cors = require('cors')
 
 
@@ -14,13 +14,13 @@ app.use(cors())
 
 //create a new token for showing body
 //use stringify for converting [object, object] into a string
-morgan.token('body', (req) => {
-    return JSON.stringify(req.body)
-})
+// morgan.token('body', (req) => {
+//     return JSON.stringify(req.body)
+// })
 
 //**TODO**: Check if this is the right way of solving this exercise and 
 // if the middlewares should be up here before the routes
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+// app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
 let persons = [
