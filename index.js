@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express');
 // const morgan = require('morgan'); 
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
+const Person = require('./models/person'); 
 const app = express();
 
 app.use(express.static('build'))
@@ -48,10 +50,12 @@ let persons = [
       }
 ]
 
-
-//showing people 
+//Data is fetched from Database
 app.get('/api/persons', (req, res) => {
-    res.json(persons); 
+    Person
+        .find({}).then(persons => {
+            res.json(persons); 
+        })
 })
 
 //**TODO**: Check if this is the right way of handling this error
@@ -127,7 +131,7 @@ app.post('/api/persons', (req, res) => {
     res.json(newPerson); 
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server is running in ${PORT}`);
 })
