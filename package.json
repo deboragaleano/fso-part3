@@ -9,9 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../fullstackopen/part2/phonebook/ && npm run build --prod && cp -R build ../../../fso-part3",
     "deploy": "git push heroku master",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",    
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
-
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongoose": "^5.10.6",
     "morgan": "^1.10.0",
     "uuid": "^8.3.0"
   }
