@@ -124,9 +124,7 @@ app.post('/api/persons', (req, res) => {
 
     persons = persons.concat(newPerson);
 
-    res.json(persons); 
-    // console.log(req.body)
-
+    res.json(newPerson); 
 })
 
 const PORT = process.env.PORT || 3001
