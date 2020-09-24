@@ -57,32 +57,36 @@ app.post('/api/persons', (req, res) => {
             error: 'name/number is missing'
         })
     }
-    
-    // Person.find({}).then(result => {
-    //     result.forEach(person => {
-    //         if(person.name === req.body.name) {
-    //             return res.status(400).json({
-    //                 error: 'name must be unique'
-    //             })
-    //         }
-    //         else {
 
-    //         }
-    //     })
-    // })
-        
     //using new Person constructor function
     const person = new Person({
         name: req.body.name,
         number: req.body.number
     })
-
     //save new person with save method that comes with Person model 
     person
         .save()
         .then(savedPerson => {
             res.json(savedPerson)
+        })         
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+    Person.find({}).then(persons => {
+        persons.forEach(person => {
+            if(person.name === req.body.name) {
+                const newNumber = {
+                    name: person.name,
+                    number: req.body.number
+                }
+                Person.findOneAndUpdate(req.params.id, newNumber, {new: true})
+                    .then(updatedPerson => {
+                        res.json(updatedPerson)
+                    })
+                    .catch(err => next(err))
+            }
         })
+    })
 })
 
 //Deleting a a single entry 
