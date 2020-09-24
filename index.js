@@ -1,6 +1,6 @@
 require('dotenv').config()
 const express = require('express');
-// const morgan = require('morgan'); 
+const morgan = require('morgan'); 
 const cors = require('cors')
 const Person = require('./models/person'); 
 const app = express();
@@ -18,11 +18,11 @@ app.use(express.json());
 
 // create a new token for showing body
 // use stringify for converting [object, object] into a string
-// morgan.token('body', (req) => {
-//     return JSON.stringify(req.body)
-// })
+morgan.token('body', (req) => {
+    return JSON.stringify(req.body)
+})
 
-// app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 //Data is fetched from Database
 app.get('/api/persons', (req, res) => {
@@ -31,6 +31,24 @@ app.get('/api/persons', (req, res) => {
             res.json(persons); 
         })
 })
+
+/***CHECK IF CORRECT***/
+// Info route 
+app.get('/info', (req, res, next) => {
+    Person.find({})
+        .then(persons => {
+            const date = new Date(); 
+            const info = 
+            `<div>
+                <p>Phonebook has info for ${persons.length} people</p>
+                <p>${date}</p>
+            </div>`
+        
+            res.send(info)
+        })
+        .catch(err => next(err))
+})
+
 
 //Display info for a single entry
 app.get('/api/persons/:id', (req, res, next) => {
@@ -71,6 +89,8 @@ app.post('/api/persons', (req, res) => {
         })         
 })
 
+/***CHECK IF CORRECT***/
+// Put / update route/request 
 app.put('/api/persons/:id', (req, res, next) => {
     Person.find({}).then(persons => {
         persons.forEach(person => {
@@ -132,7 +152,3 @@ const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server is running in ${PORT}`);
 })
-
-//TODO
-
-// - PUT doesn't work properly! 
