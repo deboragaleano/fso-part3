@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express');
 // const morgan = require('morgan'); 
 const cors = require('cors')
-const { v4: uuidv4 } = require('uuid');
 const Person = require('./models/person'); 
 const app = express();
 
@@ -11,21 +10,19 @@ app.use(express.static('build'))
 //adding cors to allow requests from all origins 
 app.use(cors())
 
+// The json-parser middleware should be among the very first middleware 
+// loaded into Express,if not then "body" will be undefined
+app.use(express.json()); 
 
-// Adding the morgan middleware for logging (give info about requests, etc.) 
-// Configure it to log messages to your console based on the tiny configuration
+/**** Adding the morgan middleware for logging (give info about requests, etc.)****/
 
-//create a new token for showing body
-//use stringify for converting [object, object] into a string
+// create a new token for showing body
+// use stringify for converting [object, object] into a string
 // morgan.token('body', (req) => {
 //     return JSON.stringify(req.body)
 // })
 
-//**TODO**: Check if this is the right way of solving this exercise and 
-// if the middlewares should be up here before the routes
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
-app.use(express.json()); 
 
 //Data is fetched from Database
 app.get('/api/persons', (req, res) => {
@@ -36,11 +33,19 @@ app.get('/api/persons', (req, res) => {
 })
 
 //Display info for a single entry
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     // fetching an individual note gets changed into the following: 
-    Person.findById(req.params.id).then(person => {
-        res.json(person)
-    })
+    Person.findById(req.params.id)
+        .then(person => {
+            if(person) {
+                res.json(person)
+            } else {
+                res.status(404).end() //not found
+            }
+        }) 
+        // the error that is passed forwards is given to the next function as a parameter. 
+        //  the execution will continue to the error handler middleware 
+        .catch(error => next(error))
 })
 
 //Adding entries
@@ -81,17 +86,50 @@ app.post('/api/persons', (req, res) => {
 })
 
 //Deleting a a single entry 
-app.delete('/api/persons/:id', (req,res) => {
-    const id = Number(req.params.id); 
+app.delete('/api/persons/:id', (req,res, next) => {
 
-    persons = persons.filter(p => p.id !== id) 
-
-    //status 204 no content
-    res.status(204).end()
+    // The easiest way to delete a person from the database is with the findByIdAndRemove method:
+    Person.findByIdAndRemove(req.params.id)
+        .then(result => {
+            res.status(204).end() //status 204 no content - succesful delete
+        })
+        .catch(err => next(err)) 
 
 })
+
+// MIDDLEWARE 
+
+// handler of requests with unknown endpoint
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+
+app.use(unknownEndpoint)
+
+// Express error handlers are middleware that are defined 
+// with a function that accepts 4 parameters. 
+// Our error handler looks like this:
+
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message)
+
+    // The error handler checks if the error is a CastError exception, 
+    // in which case we know that the error was caused by an invalid object id for Mongo
+    // the response will have the status code 400 bad request 
+    if(error.name === 'CastError'){
+        return res.status(400).send({error: 'Error: malformatted id'})
+    }
+    next(error)
+}
+
+app.use(errorHandler); 
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server is running in ${PORT}`);
 })
+
+//TODO
+
+// - PUT doesn't work properly! 
