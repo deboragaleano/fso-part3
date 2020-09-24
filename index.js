@@ -97,13 +97,12 @@ app.delete('/api/persons/:id', (req,res, next) => {
 
 })
 
-// MIDDLEWARE 
+/****** MIDDLEWARE FOR HANDLING ERRORS ********/ 
 
 // handler of requests with unknown endpoint
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
   }
-
 app.use(unknownEndpoint)
 
 // Express error handlers are middleware that are defined 
@@ -121,9 +120,9 @@ const errorHandler = (error, req, res, next) => {
     }
     next(error)
 }
-
 app.use(errorHandler); 
 
+/*******************************************/ 
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
