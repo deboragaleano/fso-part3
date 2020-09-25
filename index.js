@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan'); 
 const cors = require('cors')
 const Person = require('./models/person'); 
+const { response } = require('express');
 const app = express();
 
 app.use(express.static('build'))
@@ -100,7 +101,7 @@ app.put('/api/persons/:id', (req, res, next) => {
                     name: person.name,
                     number: req.body.number
                 }
-                Person.findOneAndUpdate(req.params.id, newNumber, {new: true})
+                Person.findOneAndUpdate(req.params.id, newNumber, {runValidators: true},{new: true})
                     .then(updatedPerson => {
                         res.json(updatedPerson)
                     })
@@ -142,6 +143,9 @@ const errorHandler = (error, req, res, next) => {
     // the response will have the status code 400 bad request 
     if(error.name === 'CastError'){
         return res.status(400).send({error: 'Error: malformatted id'})
+    // When validating an object fails, we return the following default error message from Mongoose:
+    } else if(error.name === 'ValidationError') {
+        return res.status(400).json({error: error.message})
     }
     next(error)
 }
