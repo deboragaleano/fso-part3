@@ -97,11 +97,8 @@ app.put('/api/persons/:id', (req, res, next) => {
     Person.find({}).then(persons => {
         persons.forEach(person => {
             if(person.name === req.body.name) {
-                const newNumber = {
-                    name: person.name,
-                    number: req.body.number
-                }
-                Person.findOneAndUpdate(req.params.id, newNumber, {runValidators: true},{new: true})
+                const opts = {new: true, runValidators: true}
+                Person.findOneAndUpdate(req.params.id, {number: req.body.number}, opts)
                     .then(updatedPerson => {
                         res.json(updatedPerson)
                     })
