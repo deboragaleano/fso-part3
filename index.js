@@ -67,7 +67,7 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 //Adding entries
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 
     //**TODO**: Check if this is the right way of handling both errors
     if(!req.body.name || !req.body.number) {
@@ -86,7 +86,8 @@ app.post('/api/persons', (req, res) => {
         .save()
         .then(savedPerson => {
             res.json(savedPerson)
-        })         
+        })
+        .catch(err => next(err))         
 })
 
 /***CHECK IF CORRECT***/
